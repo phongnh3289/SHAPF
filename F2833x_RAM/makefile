@@ -148,7 +148,7 @@ all: SAHF.out
 SAHF.out: $(OBJS) $(CMD_SRCS) $(CMD_UPPER_SRCS) $(LIB_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: C2000 Linker'
-	"C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/bin/cl2000" -v28 -ml -mt --float_support=fpu32 --advice:performance=all -g --define="_DEBUG" --define="LARGE_MODEL" --define="FLOATING_MATH" --quiet --diag_warning=225 -z -m"SAHF.map" --stack_size=0x380 --warn_sections -i"C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/lib" -i"C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include" -i"D:/OneDrive - Industrial University of HoChiMinh City/03_FIRMWARE/2018-2019/GIT/ACTIVE_FILTER" --reread_libs --xml_link_info="HVACI_Sensorless_2833x_linkInfo.xml" --rom_model -o "SAHF.out" $(ORDERED_OBJS)
+	"C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/bin/cl2000" -v28 -ml -mt --float_support=fpu32 -O4 --opt_for_speed=0 --advice:performance=all -g --define="_DEBUG" --define="LARGE_MODEL" --define="FLOATING_MATH" --quiet --diag_warning=225 -z -m"SAHF.map" --stack_size=0x380 --warn_sections -i"C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/lib" -i"C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include" -i"D:/OneDrive - Industrial University of HoChiMinh City/03_FIRMWARE/2018-2019/GIT/ACTIVE_FILTER" --reread_libs --xml_link_info="HVACI_Sensorless_2833x_linkInfo.xml" --rom_model -o "SAHF.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
