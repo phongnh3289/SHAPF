@@ -21,7 +21,7 @@ SAHF.obj: D:/Install/controlSUITE/device_support/f2833x/v132/DSP2833x_headers/in
 SAHF.obj: D:/Install/controlSUITE/device_support/f2833x/v132/DSP2833x_headers/include/DSP2833x_XIntrupt.h
 SAHF.obj: D:/Install/controlSUITE/device_support/f2833x/v132/DSP2833x_headers/include/DSP2833x_Xintf.h
 SAHF.obj: ../SAHF-Settings.h
-SAHF.obj: D:/Install/controlSUITE/libs/math/IQmath/v15c/include/IQmathLib.h
+SAHF.obj: ../IQmathLib.h
 SAHF.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/math.h
 SAHF.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/linkage.h
 SAHF.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/stdlib.h
@@ -52,6 +52,33 @@ SAHF.obj: D:/Install/controlSUITE/libs/app_libs/motor_control/drivers/f2833x_v2.
 SAHF.obj: D:/Install/controlSUITE/device_support/f2833x/v132/DSP2833x_common/include/DSP2833x_EPwm_defines.h
 SAHF.obj: ../dlog4ch-SAHF.h
 SAHF.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/math.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/Solar_F.h
+SAHF.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/math.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/ABC_DQ0_POS_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/ABC_DQ0_NEG_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/CLARKE_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/CNTL_2P2Z_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/CNTL_3P3Z_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/CNTL_PI_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/DLOG_1CH_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/DLOG_4CH_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/DQ0_ABC_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/iCLARKE_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/iPARK_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/MATH_EMAVG_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/MPPT_INCC_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/MPPT_INCC_I_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/MPPT_PNO_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/NOTCH_FLTR_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/PARK_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/PID_GRANDO_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/RAMPGEN_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/SINEANALYZER_DIFF_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/SINEANALYZER_DIFF_wPWR_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/SPLL_1ph_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/SPLL_1ph_SOGI_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/SPLL_3PH_DDSRF_F.h
+SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/SPLL_3PH_SRF_F.h
 
 ../SAHF.c: 
 D:/Install/controlSUITE/development_kits/~SupportFiles/F2833x_headers/PeripheralHeaderIncludes.h: 
@@ -74,7 +101,7 @@ D:/Install/controlSUITE/device_support/f2833x/v132/DSP2833x_headers/include/DSP2
 D:/Install/controlSUITE/device_support/f2833x/v132/DSP2833x_headers/include/DSP2833x_XIntrupt.h: 
 D:/Install/controlSUITE/device_support/f2833x/v132/DSP2833x_headers/include/DSP2833x_Xintf.h: 
 ../SAHF-Settings.h: 
-D:/Install/controlSUITE/libs/math/IQmath/v15c/include/IQmathLib.h: 
+../IQmathLib.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/math.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/linkage.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/stdlib.h: 
@@ -105,3 +132,30 @@ D:/Install/controlSUITE/libs/app_libs/motor_control/drivers/f2833x_v2.0/f2833xca
 D:/Install/controlSUITE/device_support/f2833x/v132/DSP2833x_common/include/DSP2833x_EPwm_defines.h: 
 ../dlog4ch-SAHF.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/math.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/Solar_F.h: 
+C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/math.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/ABC_DQ0_POS_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/ABC_DQ0_NEG_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/CLARKE_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/CNTL_2P2Z_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/CNTL_3P3Z_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/CNTL_PI_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/DLOG_1CH_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/DLOG_4CH_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/DQ0_ABC_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/iCLARKE_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/iPARK_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/MATH_EMAVG_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/MPPT_INCC_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/MPPT_INCC_I_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/MPPT_PNO_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/NOTCH_FLTR_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/PARK_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/PID_GRANDO_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/RAMPGEN_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/SINEANALYZER_DIFF_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/SINEANALYZER_DIFF_wPWR_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/SPLL_1ph_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/SPLL_1ph_SOGI_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/SPLL_3PH_DDSRF_F.h: 
+D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/SPLL_3PH_SRF_F.h: 

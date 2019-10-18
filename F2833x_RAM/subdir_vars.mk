@@ -24,12 +24,14 @@ CMD_UPPER_SRCS += \
 C_SRCS += \
 ../DSP2833x_GlobalVariableDefs.c \
 ../SAHF-DevInit_F2833x.c \
-../SAHF.c 
+../SAHF.c \
+../SPLL_3PH_SRF_F.c 
 
 C_DEPS += \
 ./DSP2833x_GlobalVariableDefs.d \
 ./SAHF-DevInit_F2833x.d \
-./SAHF.d 
+./SAHF.d \
+./SPLL_3PH_SRF_F.d 
 
 OBJS += \
 ./DLOG4CHC.obj \
@@ -38,7 +40,8 @@ OBJS += \
 ./DSP2833x_GlobalVariableDefs.obj \
 ./DSP2833x_usDelay.obj \
 ./SAHF-DevInit_F2833x.obj \
-./SAHF.obj 
+./SAHF.obj \
+./SPLL_3PH_SRF_F.obj 
 
 ASM_DEPS += \
 ./DLOG4CHC.d \
@@ -53,12 +56,14 @@ OBJS__QUOTED += \
 "DSP2833x_GlobalVariableDefs.obj" \
 "DSP2833x_usDelay.obj" \
 "SAHF-DevInit_F2833x.obj" \
-"SAHF.obj" 
+"SAHF.obj" \
+"SPLL_3PH_SRF_F.obj" 
 
 C_DEPS__QUOTED += \
 "DSP2833x_GlobalVariableDefs.d" \
 "SAHF-DevInit_F2833x.d" \
-"SAHF.d" 
+"SAHF.d" \
+"SPLL_3PH_SRF_F.d" 
 
 ASM_DEPS__QUOTED += \
 "DLOG4CHC.d" \
@@ -75,6 +80,7 @@ ASM_SRCS__QUOTED += \
 C_SRCS__QUOTED += \
 "../DSP2833x_GlobalVariableDefs.c" \
 "../SAHF-DevInit_F2833x.c" \
-"../SAHF.c" 
+"../SAHF.c" \
+"../SPLL_3PH_SRF_F.c" 
 
 

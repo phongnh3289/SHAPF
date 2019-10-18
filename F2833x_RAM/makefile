@@ -11,7 +11,6 @@ GEN_CMDS__FLAG :=
 
 ORDERED_OBJS += \
 "../rts2800_fpu32_fast_supplement.lib" \
--lrts2800_fpu32.lib \
 "../IQmath_fpu32.lib" \
 "./DLOG4CHC.obj" \
 "./DSP2833x_ADC_cal.obj" \
@@ -20,9 +19,11 @@ ORDERED_OBJS += \
 "./DSP2833x_usDelay.obj" \
 "./SAHF-DevInit_F2833x.obj" \
 "./SAHF.obj" \
+"./SPLL_3PH_SRF_F.obj" \
 "../DSP2833x_Headers_nonBIOS.cmd" \
 "../F28335_RAM_SAHF.CMD" \
 $(GEN_CMDS__FLAG) \
+-l"C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/lib/rts2800_fpu32.lib" \
 
 -include ../makefile.init
 
@@ -148,7 +149,7 @@ all: SAHF.out
 SAHF.out: $(OBJS) $(CMD_SRCS) $(CMD_UPPER_SRCS) $(LIB_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: C2000 Linker'
-	"C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/bin/cl2000" -v28 -ml -mt --float_support=fpu32 -O4 --opt_for_speed=0 --advice:performance=all -g --define="_DEBUG" --define="LARGE_MODEL" --define="FLOATING_MATH" --quiet --diag_warning=225 -z -m"SAHF.map" --stack_size=0x380 --warn_sections -i"C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/lib" -i"C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include" -i"D:/OneDrive - Industrial University of HoChiMinh City/03_FIRMWARE/2018-2019/GIT/ACTIVE_FILTER" --reread_libs --xml_link_info="HVACI_Sensorless_2833x_linkInfo.xml" --rom_model -o "SAHF.out" $(ORDERED_OBJS)
+	"C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/bin/cl2000" -v28 -ml -mt --float_support=fpu32 -O4 --opt_for_speed=0 --advice:performance=all -g --define="_DEBUG" --define="LARGE_MODEL" --define="FLOATING_MATH" --quiet --diag_warning=225 -z -m"SAHF.map" --stack_size=0x380 --warn_sections -i"C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/lib" -i"C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include" -i"D:/OneDrive/OneDrive - Industrial University of HoChiMinh City/03_FIRMWARE/2018-2019/GIT/ACTIVE_FILTER" --reread_libs --xml_link_info="HVACI_Sensorless_2833x_linkInfo.xml" --rom_model -o "SAHF.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
@@ -162,8 +163,8 @@ SAHF.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "DLOG4CHC.obj" "DSP2833x_ADC_cal.obj" "DSP2833x_CodeStartBranch.obj" "DSP2833x_GlobalVariableDefs.obj" "DSP2833x_usDelay.obj" "SAHF-DevInit_F2833x.obj" "SAHF.obj" 
-	-$(RM) "DSP2833x_GlobalVariableDefs.d" "SAHF-DevInit_F2833x.d" "SAHF.d" 
+	-$(RM) "DLOG4CHC.obj" "DSP2833x_ADC_cal.obj" "DSP2833x_CodeStartBranch.obj" "DSP2833x_GlobalVariableDefs.obj" "DSP2833x_usDelay.obj" "SAHF-DevInit_F2833x.obj" "SAHF.obj" "SPLL_3PH_SRF_F.obj" 
+	-$(RM) "DSP2833x_GlobalVariableDefs.d" "SAHF-DevInit_F2833x.d" "SAHF.d" "SPLL_3PH_SRF_F.d" 
 	-$(RM) "DLOG4CHC.d" "DSP2833x_ADC_cal.d" "DSP2833x_CodeStartBranch.d" "DSP2833x_usDelay.d" 
 	-@echo 'Finished clean'
 	-@echo ' '

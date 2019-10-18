@@ -1,24 +1,54 @@
+//03102019-calib+symetric phase ok
 #include "PeripheralHeaderIncludes.h"
 #include "SAHF-Settings.h"
 #include "IQmathLib.h"
 #include "SAHF.h"
 #include <math.h>
+#include "Solar_F.h"
 //**********************************************************************************************//
 extern Uint16 RamfuncsLoadStart;
 extern Uint16 RamfuncsLoadEnd;
 extern Uint16 RamfuncsRunStart;
 //**********************************************************************************************//
-
+#define DSP2833x_DEVICE_H 1
 // Prototype statements for functions found within this file.
 interrupt void MainISR(void);
 interrupt void OffsetISR(void);
-
-
+// Functions that will be run from RAM
+#pragma CODE_SECTION(MainISR,"ramfuncs");
+#pragma CODE_SECTION(OffsetISR,"ramfuncs");
+float32 ZLpu = 2*PI*50*L_FILTER;
+//DATA3P vref = DATA3P_DEFAULTS;
+PWMGEN pwm1 = PWMGEN_DEFAULTS;
+SVGEN svgen1 = SVGEN_DEFAULTS;
+PIDATA pi_id = PIDATA_DEFAULTS;
+PIDATA pi_iq = PIDATA_DEFAULTS;
+PIDATA pi_vdc = PIDATA_DEFAULTS;
+DLOG_4CH dlog = DLOG_4CH_DEFAULTS;
+DATA3P vref = DATA3P_DEFAULTS;
+DATA3P cur_load = DATA3P_DEFAULTS;
+DATA3P cur_source = DATA3P_DEFAULTS;
+DATA3P vols = DATA3P_DEFAULTS;
+SPLL_3ph_SRF_F pll;
+RMPCNTL rc1 = RMPCNTL_DEFAULTS;
+RAMPGEN rg1 = RAMPGEN_DEFAULTS;
+IPARK curr_test = IPARK_DEFAULTS;
+// Instance a PWM DAC driver instance
+PWMDAC pwmdac1 = PWMDAC_DEFAULTS;
+//  Instance a phase voltage calculation
+PHASEVOLTAGE volt_test = PHASEVOLTAGE_DEFAULTS;
+_iq VdTesting = _IQ(0.8);           // Vd reference (pu)
+_iq VqTesting = _IQ(0.2);          // Vq reference (pu)
+_iq IdRef = _IQ(0.1);           // For Closed Loop tests
+_iq M_DieuChe = _IQ(0.95);
+_iq cos_phi = _IQ(0.95);
+#define BASE_FREQ       50           // Base electrical frequency (Hz)
+#define GRID_FREQ       50      // Hz
 void main(void)
 {
     DeviceInit();
     en_driver(0);
-    while (EnableFlag==FALSE);
+    //while (EnableFlag==FALSE);
     CpuTimer0Regs.PRD.all =  mSec1;     // A tasks
     CpuTimer1Regs.PRD.all =  mSec50*8;     // B tasks
     CpuTimer2Regs.PRD.all =  mSec50*4;  // C tasks
@@ -37,7 +67,23 @@ void main(void)
     dlog.size = 0x0C8;
     dlog.prescalar = 5;
     dlog.init(&dlog);
-
+    SPLL_3ph_SRF_F_init(GRID_FREQ,((float)(0.001/ISR_FREQUENCY)),&pll);
+    pi_id.Kp=_IQ(0.3);
+    pi_id.Ki=_IQ(0.01);
+    pi_id.Umax =_IQ(200.0);
+    pi_id.Umin =_IQ(-200.0);
+// Initialize the RAMPGEN module
+    rg1.StepAngleMax = _IQ(BASE_FREQ*T);
+    pi_iq.Kp=_IQ(0.3);
+    pi_iq.Ki=_IQ(0.01);
+    pi_iq.Umax =_IQ(200.0);
+    pi_iq.Umin =_IQ(-200.0);
+    pi_vdc.Kp=_IQ(0.65);
+    pi_vdc.Ki=_IQ(0.02);
+    pi_vdc.Umax =_IQ(20.0);
+    pi_vdc.Umin =_IQ(-20.0);
+    pi_id.Ref = _IQ(1);
+    pi_iq.Ref = _IQ(0.0);
 // Initialize ADC for DMC Kit Rev 1.1
     ChSel[0]=1;     // Dummy meas. avoid 1st sample issue Rev0 Picollo*/
     ChSel[1]=1;     // ChSelect: ADC A1-> Phase A source Current
@@ -49,6 +95,11 @@ void main(void)
     ChSel[7]=7;     // ChSelect: ADC A7-> DC Bus  Voltage
 // Initialize ADC module
     ADC_MACRO_INIT(ChSel,TrigSel,ACQPS)
+// Initialize PWMDAC module
+    //pwmdac1.PeriodMax=500;          // @60Mhz, 1500->20kHz, 1000-> 30kHz, 500->60kHz
+    //pwmdac1.HalfPerMax=pwmdac1.PeriodMax/2;
+    //PWMDAC_INIT_MACRO(6,pwmdac1)    // PWM 6A,6B
+    //PWMDAC_INIT_MACRO(7,pwmdac1)    // PWM 7A,7B
     EALLOW; // This is needed to write to EALLOW protected registers
     PieVectTable.EPWM1_INT = &OffsetISR;
     EDIS;
@@ -60,7 +111,6 @@ void main(void)
     EPwm1Regs.ETPS.bit.INTPRD = 1;   // Generate interrupt on the 1st event
     EPwm1Regs.ETCLR.bit.INT = 1;     // Enable more interrupts
 // Enable CPU INT3 for EPWM1_INT:
-    PLL3P_INIT(50,T,&pll);
     IER |= M_INT3;
 // Enable global Interrupts and higher priority real-time debug events:
     EINT;   // Enable Global interrupt INTM
@@ -118,45 +168,99 @@ void C0(void)
 interrupt void MainISR(void)
 {
     //GpioDataRegs.GPASET.bit.GPIO12=1;
-        cur_load.As=-((AdcMirror.ADCRESULT5)*3.3/4096-offsetC)*3.8;     //Load curr Phase A
-        cur_load.Bs=-((AdcMirror.ADCRESULT6)*3.3/4096-offsetD)*3.8;     //Load curr Phase B
-        vols.As=-((AdcMirror.ADCRESULT3)*3.3/4096-offsetA)*62;        //Volt Phase A
-        vols.Bs=-((AdcMirror.ADCRESULT4)*3.3/4096-offsetB)*62;        //Volt Phase B
-        cur_source.As=-((AdcMirror.ADCRESULT1)*3.3/4096-offsetE)*1.9;       //Source curr Phase A
-        cur_source.Bs=-((AdcMirror.ADCRESULT2)*3.3/4096-offsetF)*1.9;       //Source curr Phase B
-        //VI.Icl = -VI.Ial-VI.Ibl;
-        vols.Cs = -vols.As - vols.Bs;
-        cur_source.Cs = -cur_source.As - cur_source.Bs;
-        cur_load.Cs = -cur_load.As - cur_load.Bs;
+        if(en_pwm==1){en_driver(1);IdRef=2;en_pwm=3;}
+        if(en_pwm==0){en_driver(0);IdRef=0.1;en_pwm=3;}
+        cur_load.As=((AdcMirror.ADCRESULT5)*3.3/4096-offsetC)*5.428;     //Load curr Phase A
+        cur_load.Bs=((AdcMirror.ADCRESULT6)*3.3/4096-offsetD)*5.428;     //Load curr Phase B
+        vols.Bs=((AdcMirror.ADCRESULT3)*3.3/4096-offsetA)*62;        //Volt Phase A
+        vols.As=((AdcMirror.ADCRESULT4)*3.3/4096-offsetB)*62;        //Volt Phase B
+        cur_source.As=((AdcMirror.ADCRESULT1)*3.3/4096-offsetE)*2.714;       //Source curr Phase A
+        cur_source.Bs=((AdcMirror.ADCRESULT2)*3.3/4096-offsetF)*2.714;       //Source curr Phase B
+        vols.Bs = fir(vols.Bs,VbDelay,coeffs);
+        vols.As = fir(vols.As,VaDelay,coeffs);
+        cur_source.As = fir(cur_source.As,IaDelay,coeffs);
+        cur_source.Bs = fir(cur_source.Bs,IbDelay,coeffs);
+        //cur_load.As = fir(cur_load.As,Il_aDelay,coeffs);
+        //cur_load.Bs = fir(cur_load.Bs,Il_bDelay,coeffs);
+        //if((cur_source.As>6)||(cur_source.As<-6)||(cur_source.Bs>6)||(cur_source.Bs<-6)){en_driver(0);en_pwm=0;}
+        vols.Cs = 0 -vols.As - vols.Bs;
+        cur_source.Cs = 0 - cur_source.As - cur_source.Bs;
+        cur_load.Cs = 0 -cur_load.As - cur_load.Bs;
 //Vdc link
-        Vdc=(AdcMirror.ADCRESULT7)*3.3*44/4096;
-//FIR Filter
-        Vdc = fir(Vdc,VdcDelay,coeffs);
+        volt_test.DcBusVolt=(AdcMirror.ADCRESULT7)*3.3*44/4096;
+        volt_test.DcBusVolt = fir(volt_test.DcBusVolt,VdcDelay,coeffs);
+        //pi_vdc.Ref = 40;
+        //pi_vdc.Fbk = volt_test.DcBusVolt;
+        //PI_CONTROLER(&pi_vdc);
         //Ism=PI_Vdc(Vdc_ref-Vdc);
-        vols.Sin = sin(pll.theta[1]);
-        vols.Cos = cos(pll.theta[1]);
+    //--------------------------------------------------------------
+        //rc1.TargetValue = IdRef;
+        //RC_MACRO(rc1)
+        //rg1.Freq = rc1.SetpointValue;
+        //RG_MACRO(rg1)
+        vols.Sin = (float)sin(pll.theta[1]);
+        vols.Cos = (float)cos(pll.theta[1]);
         ABC_DQ(&vols);
-     //--------------------------------------------------------------
-        cur_source.Sin = vols.Sin;
-        cur_source.Cos = vols.Cos;
-        ABC_DQ(&cur_source);
-     //--------------------------------------------------------------
-        pll.vq[0] = vols.Qs;
-        PLL3P(&pll);
-        // ------------------------------------------------------------------------------
-        //  Connect inputs of the SVGEN_DQ module and call the space-vector gen. macro
-        // ------------------------------------------------------------------------------
-//      svgen1.Ualpha = ipark1.Alpha;
-//      svgen1.Ubeta = ipark1.Beta;
-//      SVGENDQ_MACRO(svgen1)
-//      pwm1.MfuncC1 = svgen1.Ta;
-//      pwm1.MfuncC2 = svgen1.Tb;
-//      pwm1.MfuncC3 = svgen1.Tc;
-        //PWM_MACRO(1,2,3,pwm1)
-        DlogCh1 = (int16)(cur_source.As*1000);
-        DlogCh2 = (int16)(cur_source.Bs*1000);
-        DlogCh3 = (int16)(cur_load.As*1000);
-        DlogCh4 = (int16)(cur_load.Bs*1000);
+    //--------------------------------------------------------------
+       cur_source.Sin = (float)sin(pll.theta[1]-PI/cos_phi);
+       cur_source.Cos = (float)cos(pll.theta[1]-PI/cos_phi);
+       ABC_DQ(&cur_source);
+       cur_load.Sin = vols.Sin;
+       cur_load.Cos = vols.Cos;
+       ABC_DQ(&cur_load);
+
+       //cur_source.Ds=fir(cur_source.Ds,IdDelay,coeffs);
+       //cur_source.Qs=fir(cur_source.Qs,IqDelay,coeffs);
+    //--------------------------------------------------------------
+       pll.v_q[0] = vols.Qs;
+       SPLL_3ph_SRF_F_FUNC(&pll);
+    //--------------------------------------------------------------
+    // Calculate the new PWM compare values
+        //pi_vdc.Ref = 36;
+        //pi_vdc.Fbk = volt_test.DcBusVolt;
+        //PI_CONTROLER(&pi_vdc);
+
+        //pi_id.Ref = pi_vdc.Out;
+        pi_id.Fbk = cur_source.Ds;
+        PI_CONTROLER(&pi_id);
+
+        pi_iq.Fbk = cur_source.Qs;
+        PI_CONTROLER(&pi_iq);
+        vref.Ds = pi_id.Out - _IQmpy(_IQ(ZLpu),cur_source.Qs) + vols.Ds;
+        vref.Ds = (vref.Ds>_IQ(150))?_IQ(150):vref.Ds;
+        vref.Qs = pi_iq.Out + _IQmpy(_IQ(ZLpu),cur_source.Ds) + vols.Qs;
+        vref.Qs = (vref.Qs>_IQ(150))?_IQ(150):vref.Qs;
+        vref.Qs = (vref.Qs<_IQ(-150))?_IQ(-150):vref.Qs;
+        vref.Cos = vols.Cos;
+        vref.Sin = vols.Sin;
+        DQ_ABC(&vref);
+        M_DieuChe=sqrt(3)*sqrt(vref.Alpha*vref.Alpha+vref.Beta*vref.Beta)/volt_test.DcBusVolt;
+        if(M_DieuChe>=0.95)M_DieuChe=0.95;
+        svgen1.Ualpha = vref.Alpha*M_DieuChe/sqrt(vref.Alpha*vref.Alpha+vref.Beta*vref.Beta);
+        svgen1.Ubeta = vref.Beta*M_DieuChe/sqrt(vref.Alpha*vref.Alpha+vref.Beta*vref.Beta);
+        SVGENDQ_MACRO(svgen1)
+        pwm1.MfuncC1 = svgen1.Ta;
+        pwm1.MfuncC2 = svgen1.Tb;
+        pwm1.MfuncC3 = svgen1.Tc;
+        PWM_MACRO(1,2,3,pwm1)
+
+        //volt_test.MfuncV1 = svgen1.Ta;
+        //volt_test.MfuncV2 = svgen1.Tb;
+        //volt_test.MfuncV3 = svgen1.Tc;
+        //PHASEVOLT_MACRO(volt_test)
+// PWMDAC 6A, 6B
+        //pwmdac1.MfuncC1 = clarke1.As;
+        //pwmdac1.MfuncC2 = clarke1.Bs;
+        //PWMDAC_MACRO(6,pwmdac1)
+// PWMDAC 7A, 7B
+        //pwmdac1.MfuncC1 = qep1.ElecTheta;
+        //pwmdac1.MfuncC2 = smo1.Theta;
+        //PWMDAC_MACRO(7,pwmdac1)
+//Datalogger
+        DlogCh1 = _IQtoQ10(vols.As);
+        DlogCh2 = _IQtoQ10(cur_source.As);
+        DlogCh3 = _IQtoQ10(cur_source.Bs);
+        DlogCh4 = _IQtoQ10(pll.theta[1]);
         dlog.update(&dlog);
 // Enable more interrupts from this timer
     EPwm1Regs.ETCLR.bit.INT = 1;
