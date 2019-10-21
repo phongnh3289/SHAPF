@@ -49,12 +49,11 @@ int DlogCh1 = 0;
 int DlogCh2 = 0;
 int DlogCh3 = 0;
 int DlogCh4 = 0;
-float p_in, q_in;
 int en_pwm=0;
 #define pllQ    _IQ21
 #define Qmpy    _IQ21mpy
 // Instance a PWM driver instance
-
+float Vdc_ref=60;
 void en_driver(int dis_pwm);
 void PrintNumber(Uint16 number);
 float fir(float Xn, float *xDelay, float *coeffs);
@@ -118,11 +117,18 @@ _iq IcDelay[FILTER_LEN]= {0,0,0,0,0,0,0,0,0,0,0}; // bo dem cho dien ap Vdc
 _iq VdcDelay[FILTER_LEN]= {0,0,0,0,0,0,0,0,0,0,0}; // bo dem cho dien ap Vdc
 _iq IdDelay[FILTER_LEN]= {0,0,0,0,0,0,0,0,0,0,0}; // bo dem cho dien ap Vdc
 _iq IqDelay[FILTER_LEN]= {0,0,0,0,0,0,0,0,0,0,0}; // bo dem cho dien ap Vdc
+_iq IdcDelay[FILTER_LEN]= {0,0,0,0,0,0,0,0,0,0,0}; // bo dem cho dien ap Vdc
+_iq IqcDelay[FILTER_LEN]= {0,0,0,0,0,0,0,0,0,0,0}; // bo dem cho dien ap Vdc
 _iq VdDelay[FILTER_LEN]= {0,0,0,0,0,0,0,0,0,0,0}; // bo dem cho dien ap Vdc
 _iq VqDelay[FILTER_LEN]= {0,0,0,0,0,0,0,0,0,0,0}; // bo dem cho dien ap Vdc
+_iq VdcOutDelay[FILTER_LEN]= {0,0,0,0,0,0,0,0,0,0,0}; // bo dem cho dien ap Vdc
+
 //this coefficients get from fdatool of Matlab, Fs = 10khz, Fc = 150Hz, ;length = 11, window = rectangular
 _iq coeffs[FILTER_LEN] = {0.0828,0.0876,0.0914,0.0942,0.0959,0.0964,0.0959,0.0942,0.0914,0.0876,0.0828};  // filter coefficients
-
+_iq coeffs_5 [FILTER_LEN] = {0, -0.08258135496766, -0.06805077894271,   0.1020761684141,
+                             0.3303254198707,   0.4364610912513,   0.3303254198707,   0.1020761684141,
+                           -0.06805077894271, -0.08258135496766,0
+};
 typedef struct {
     _iq As;
     _iq Bs;
@@ -139,12 +145,11 @@ typedef struct {
     _iq Ka;
     _iq Kb;
     _iq Kc;
+    _iq DsF;
+    _iq QsF;
 } DATA3P;
 #define DATA3P_DEFAULTS {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-unsigned int wivdc=0;
-float ui0vdc = 0, Vdc_ref=70, Vdc=0, Ism=3.0;
-float Kp=1, Ki=0.1;
-float UdcMAX=6,UdcMIN=-6 ; // Vdc/sqrt(3)
+
 typedef struct { int32  vq[2];
                  int32  ylf[2];
                  int32  fo;
