@@ -22,11 +22,11 @@ SAHF.obj: D:/Install/controlSUITE/device_support/f2833x/v132/DSP2833x_headers/in
 SAHF.obj: D:/Install/controlSUITE/device_support/f2833x/v132/DSP2833x_headers/include/DSP2833x_Xintf.h
 SAHF.obj: ../SAHF-Settings.h
 SAHF.obj: ../IQmathLib.h
-SAHF.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/math.h
-SAHF.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/linkage.h
-SAHF.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/stdlib.h
-SAHF.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/stdlibf.h
-SAHF.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/limits.h
+SAHF.obj: D:/Install/CCS/include/math.h
+SAHF.obj: D:/Install/CCS/include/linkage.h
+SAHF.obj: D:/Install/CCS/include/stdlib.h
+SAHF.obj: D:/Install/CCS/include/stdlibf.h
+SAHF.obj: D:/Install/CCS/include/limits.h
 SAHF.obj: ../SAHF.h
 SAHF.obj: D:/Install/controlSUITE/libs/app_libs/motor_control/math_blocks/v4.0/aci_fe.h
 SAHF.obj: D:/Install/controlSUITE/libs/app_libs/motor_control/math_blocks/v4.0/aci_fe_const.h
@@ -51,9 +51,9 @@ SAHF.obj: D:/Install/controlSUITE/libs/app_libs/motor_control/drivers/f2833x_v2.
 SAHF.obj: D:/Install/controlSUITE/libs/app_libs/motor_control/drivers/f2833x_v2.0/f2833xcap.h
 SAHF.obj: D:/Install/controlSUITE/device_support/f2833x/v132/DSP2833x_common/include/DSP2833x_EPwm_defines.h
 SAHF.obj: ../dlog4ch-SAHF.h
-SAHF.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/math.h
+SAHF.obj: D:/Install/CCS/include/math.h
 SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/Solar_F.h
-SAHF.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/math.h
+SAHF.obj: D:/Install/CCS/include/math.h
 SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/ABC_DQ0_POS_F.h
 SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/ABC_DQ0_NEG_F.h
 SAHF.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/CLARKE_F.h
@@ -102,11 +102,11 @@ D:/Install/controlSUITE/device_support/f2833x/v132/DSP2833x_headers/include/DSP2
 D:/Install/controlSUITE/device_support/f2833x/v132/DSP2833x_headers/include/DSP2833x_Xintf.h: 
 ../SAHF-Settings.h: 
 ../IQmathLib.h: 
-C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/math.h: 
-C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/linkage.h: 
-C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/stdlib.h: 
-C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/stdlibf.h: 
-C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/limits.h: 
+D:/Install/CCS/include/math.h: 
+D:/Install/CCS/include/linkage.h: 
+D:/Install/CCS/include/stdlib.h: 
+D:/Install/CCS/include/stdlibf.h: 
+D:/Install/CCS/include/limits.h: 
 ../SAHF.h: 
 D:/Install/controlSUITE/libs/app_libs/motor_control/math_blocks/v4.0/aci_fe.h: 
 D:/Install/controlSUITE/libs/app_libs/motor_control/math_blocks/v4.0/aci_fe_const.h: 
@@ -131,9 +131,9 @@ D:/Install/controlSUITE/libs/app_libs/motor_control/drivers/f2833x_v2.0/f2833xil
 D:/Install/controlSUITE/libs/app_libs/motor_control/drivers/f2833x_v2.0/f2833xcap.h: 
 D:/Install/controlSUITE/device_support/f2833x/v132/DSP2833x_common/include/DSP2833x_EPwm_defines.h: 
 ../dlog4ch-SAHF.h: 
-C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/math.h: 
+D:/Install/CCS/include/math.h: 
 D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/Solar_F.h: 
-C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/math.h: 
+D:/Install/CCS/include/math.h: 
 D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/ABC_DQ0_POS_F.h: 
 D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/ABC_DQ0_NEG_F.h: 
 D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/CLARKE_F.h: 

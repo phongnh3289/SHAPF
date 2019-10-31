@@ -4,7 +4,7 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6
+CG_TOOL_ROOT := D:/Install/CCS
 
 GEN_OPTS__FLAG := 
 GEN_CMDS__FLAG := 
@@ -23,7 +23,7 @@ ORDERED_OBJS += \
 "../DSP2833x_Headers_nonBIOS.cmd" \
 "../F28335_RAM_SAHF.CMD" \
 $(GEN_CMDS__FLAG) \
--l"C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/lib/rts2800_fpu32.lib" \
+-l"D:/Install/CCS/lib/rts2800_fpu32.lib" \
 
 -include ../makefile.init
 
@@ -149,14 +149,14 @@ all: SAHF.out
 SAHF.out: $(OBJS) $(CMD_SRCS) $(CMD_UPPER_SRCS) $(LIB_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: C2000 Linker'
-	"C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/bin/cl2000" -v28 -ml -mt --float_support=fpu32 -O4 --opt_for_speed=0 --advice:performance=all -g --define="_DEBUG" --define="LARGE_MODEL" --define="FLOATING_MATH" --quiet --diag_warning=225 -z -m"SAHF.map" --stack_size=0x380 --warn_sections -i"C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/lib" -i"C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include" -i"D:/OneDrive/OneDrive - Industrial University of HoChiMinh City/03_FIRMWARE/2018-2019/GIT/ACTIVE_FILTER" --reread_libs --xml_link_info="HVACI_Sensorless_2833x_linkInfo.xml" --rom_model -o "SAHF.out" $(ORDERED_OBJS)
+	"D:/Install/CCS/bin/cl2000" -v28 -ml -mt --float_support=fpu32 -O4 --opt_for_speed=0 --advice:performance=all -g --define=_DEBUG --define=LARGE_MODEL --define=FLOATING_MATH --quiet --diag_warning=225 -z -m"SAHF.map" --stack_size=0x380 --warn_sections -i"D:/Install/CCS/lib" -i"D:/Install/CCS/include" -i"D:/OneDrive/OneDrive - Industrial University of HoChiMinh City/03_FIRMWARE/2018-2019/GIT/ACTIVE_FILTER" --reread_libs --xml_link_info="HVACI_Sensorless_2833x_linkInfo.xml" --rom_model -o "SAHF.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
 SAHF.hex: $(EXE_OUTPUTS)
 	@echo 'Building files: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo 'Invoking: C2000 Hex Utility'
-	"C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/bin/hex2000"  -o "SAHF.hex" $(EXE_OUTPUTS__QUOTED)
+	"D:/Install/CCS/bin/hex2000"  -o "SAHF.hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo ' '
 

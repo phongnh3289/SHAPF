@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -l"C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/lib/rts2800_fpu32.lib"
+LIBS := -l"D:/Install/CCS/lib/rts2800_fpu32.lib"
 

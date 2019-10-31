@@ -36,11 +36,11 @@ DATA3P curr_test = DATA3P_DEFAULTS;
 PWMDAC pwmdac1 = PWMDAC_DEFAULTS;
 //  Instance a phase voltage calculation
 PHASEVOLTAGE volt_test = PHASEVOLTAGE_DEFAULTS;
-_iq VdTesting = _IQ(0.8);           // Vd reference (pu)
+_iq demox = _IQ(2);           // Vd reference (pu)
 _iq VqTesting = _IQ(0.2);          // Vq reference (pu)
 _iq IdRef = _IQ(0.1);           // For Closed Loop tests
 _iq M_DieuChe = _IQ(0.95);
-_iq cos_phi = _IQ(3.2);
+_iq cos_phi = _IQ(3.1415);
 _iq cos_phi_inv = _IQ(0.1);
 #define BASE_FREQ       50           // Base electrical frequency (Hz)
 #define GRID_FREQ       50      // Hz
@@ -69,20 +69,20 @@ void main(void)
     dlog.prescalar = 5;
     dlog.init(&dlog);
     SPLL_3ph_SRF_F_init(GRID_FREQ,((float)(0.001/ISR_FREQUENCY)),&pll);
-    pi_id.Kp=_IQ(1);
-    pi_id.Ki=_IQ(0.01);
+    pi_id.Kp=_IQ(10);//1 for 3mH inductor
+    pi_id.Ki=_IQ(0.1);//0.01 for 3mH inductor
     pi_id.Umax =_IQ(100.0);
     pi_id.Umin =_IQ(-100.0);
 // Initialize the RAMPGEN module
-    pi_iq.Kp=_IQ(1);
-    pi_iq.Ki=_IQ(0.01);
+    pi_iq.Kp=_IQ(10);//1 for 3mH inductor
+    pi_iq.Ki=_IQ(0.1);//0.01 for 3mH inductor
     pi_iq.Umax =_IQ(100.0);
     pi_iq.Umin =_IQ(-100.0);
-    pi_vdc.Kp=_IQ(20);
+    pi_vdc.Kp=_IQ(0.1);//1 for 3mH inductor
     pi_vdc.Ki=_IQ(0.05);
     pi_vdc.Umax =_IQ(5.0);
     pi_vdc.Umin =_IQ(-5.0);
-    pi_id.Ref = _IQ(0.0);
+    pi_id.Ref = _IQ(2.0);
     pi_iq.Ref = _IQ(0.0);
 // Initialize ADC for DMC Kit Rev 1.1
     ChSel[0]=1;     // Dummy meas. avoid 1st sample issue Rev0 Picollo*/
@@ -189,8 +189,8 @@ interrupt void MainISR(void)
 //--------------------------------------------------------------
         vols.Bs = fir(vols.Bs,VbDelay,coeffs);
         vols.As = fir(vols.As,VaDelay,coeffs);
-        cur_inv.As = fir(cur_inv.As,IaDelay,coeffs);
-        cur_inv.Bs = fir(cur_inv.Bs,IbDelay,coeffs);
+        //cur_inv.As = fir(cur_inv.As,IaDelay,coeffs);
+        //cur_inv.Bs = fir(cur_inv.Bs,IbDelay,coeffs);
         //cur_load.As = fir(cur_load.As,Il_aDelay,coeffs);
         //cur_load.Bs = fir(cur_load.Bs,Il_bDelay,coeffs);
         //if((cur_source.As>6)||(cur_source.As<-6)||(cur_source.Bs>6)||(cur_source.Bs<-6)){en_driver(0);en_pwm=0;}
@@ -199,7 +199,7 @@ interrupt void MainISR(void)
         cur_load.Cs = 0 -cur_load.As - cur_load.Bs;
         //Vdc link--------------------------------------------------------------
         volt_test.DcBusVolt=(AdcMirror.ADCRESULT7)*3.3*44/4096;
-        volt_test.DcBusVolt = fir(volt_test.DcBusVolt,VdcDelay,coeffs_5);
+        volt_test.DcBusVolt = fir(volt_test.DcBusVolt,VdcDelay,coeffsDC);
         pi_vdc.Ref = Vdc_ref;
         pi_vdc.Fbk = volt_test.DcBusVolt;
         PI_CONTROLER(&pi_vdc);
@@ -211,8 +211,8 @@ interrupt void MainISR(void)
         //RC_MACRO(rc1)
         //rg1.Freq = rc1.SetpointValue;
         //RG_MACRO(rg1)
-        vols.Sin = (float)sin(pll.theta[1]-PI/2);
-        vols.Cos = (float)cos(pll.theta[1]-PI/2);
+        vols.Sin = (float)sin(pll.theta[1]);
+        vols.Cos = (float)cos(pll.theta[1]);
         ABC_DQ(&vols);
         //curr_test.As = vols.As/10-cur_load.As;
         //curr_test.Bs = vols.Bs/10-cur_load.Bs;
@@ -221,12 +221,12 @@ interrupt void MainISR(void)
         //curr_test.Cos=(float)cos(pll.theta[1]-PI/cos_phi_inv-PI/2);
         //ABC_DQ(&curr_test);
 //--------------------------------------------------------------
-        cur_inv.Sin = (float)sin(pll.theta[1]-cos_phi-PI/2);
-        cur_inv.Cos = (float)cos(pll.theta[1]-cos_phi-PI/2);
+        cur_inv.Sin = (float)sin(pll.theta[1]-cos_phi);
+        cur_inv.Cos = (float)cos(pll.theta[1]-cos_phi);
         ABC_DQ(&cur_inv);
 //--------------------------------------------------------------
-        cur_load.Sin = (float)sin(pll.theta[1]-PI/2-cos_phi_inv);
-        cur_load.Cos = (float)cos(pll.theta[1]-PI/2-cos_phi_inv);
+        cur_load.Sin = (float)sin(pll.theta[1]);
+        cur_load.Cos = (float)cos(pll.theta[1]);
         ABC_DQ(&cur_load);
 //--------------------------------------------------------------
         pll.v_q[0] = vols.Qs;
@@ -234,8 +234,8 @@ interrupt void MainISR(void)
 //--------------------------------------------------------------
         //pi_vdc.Out=fir(pi_vdc.Out,VdcOutDelay,coeffs_5);
         pi_id.Fbk = cur_inv.Ds;
-        cur_load.DsF=fir(cur_load.Ds,IdcDelay,coeffs_5);
-        pi_id.Ref = -(cur_load.Ds - cur_load.DsF - pi_vdc.Out);
+        cur_load.DsF=fir(cur_load.Ds,IdcDelay,coeffsDC);
+        pi_id.Ref = -(cur_load.Ds  - cur_load.DsF - pi_vdc.Out);
         //pi_id.Ref = curr_test.Ds- pi_vdc.Out;
         pi_id.Ref = (pi_id.Ref>_IQ(15))?_IQ(15):pi_id.Ref;
         pi_id.Ref = (pi_id.Ref<_IQ(-15))?_IQ(-15):pi_id.Ref;
@@ -243,7 +243,7 @@ interrupt void MainISR(void)
 //--------------------------------------------------------------
         pi_iq.Fbk = cur_inv.Qs;
         //pi_iq.Ref = -curr_test.Qs;
-        cur_load.QsF=fir(cur_load.Qs,IqcDelay,coeffs_5);
+        cur_load.QsF=fir(cur_load.Qs,IqcDelay,coeffsDC);
         pi_iq.Ref = -(cur_load.Qs-cur_load.QsF);
         pi_iq.Ref = (pi_iq.Ref>_IQ(15))?_IQ(15):pi_iq.Ref;
         pi_iq.Ref = (pi_iq.Ref<_IQ(-15))?_IQ(-15):pi_iq.Ref;

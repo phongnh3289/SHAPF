@@ -58,7 +58,7 @@ void en_driver(int dis_pwm);
 void PrintNumber(Uint16 number);
 float fir(float Xn, float *xDelay, float *coeffs);
 
-#define L_FILTER  0.01 // Henry
+#define L_FILTER  0.003 // Henry
 // Global variables used in this system
 const Uint16 font[17] = {
     0x3f, /* 0 */
@@ -125,10 +125,7 @@ _iq VdcOutDelay[FILTER_LEN]= {0,0,0,0,0,0,0,0,0,0,0}; // bo dem cho dien ap Vdc
 
 //this coefficients get from fdatool of Matlab, Fs = 10khz, Fc = 150Hz, ;length = 11, window = rectangular
 _iq coeffs[FILTER_LEN] = {0.0828,0.0876,0.0914,0.0942,0.0959,0.0964,0.0959,0.0942,0.0914,0.0876,0.0828};  // filter coefficients
-_iq coeffs_5 [FILTER_LEN] = {0, -0.08258135496766, -0.06805077894271,   0.1020761684141,
-                             0.3303254198707,   0.4364610912513,   0.3303254198707,   0.1020761684141,
-                           -0.06805077894271, -0.08258135496766,0
-};
+_iq coeffsDC[FILTER_LEN] = {0.09077,0.09085,0.09092,0.09097,0.09099,0.091,0.09099,0.09097,0.09092,0.09085,0.09077};
 typedef struct {
     _iq As;
     _iq Bs;

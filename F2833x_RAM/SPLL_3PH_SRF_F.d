@@ -2,8 +2,8 @@
 
 SPLL_3PH_SRF_F.obj: ../SPLL_3PH_SRF_F.c
 SPLL_3PH_SRF_F.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/Solar_F.h
-SPLL_3PH_SRF_F.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/math.h
-SPLL_3PH_SRF_F.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/linkage.h
+SPLL_3PH_SRF_F.obj: D:/Install/CCS/include/math.h
+SPLL_3PH_SRF_F.obj: D:/Install/CCS/include/linkage.h
 SPLL_3PH_SRF_F.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/ABC_DQ0_POS_F.h
 SPLL_3PH_SRF_F.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/ABC_DQ0_NEG_F.h
 SPLL_3PH_SRF_F.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/CLARKE_F.h
@@ -32,8 +32,8 @@ SPLL_3PH_SRF_F.obj: D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/inclu
 
 ../SPLL_3PH_SRF_F.c: 
 D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/Solar_F.h: 
-C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/math.h: 
-C:/ti/ccsv8/tools/compiler/ti-cgt-c2000_6.4.6/include/linkage.h: 
+D:/Install/CCS/include/math.h: 
+D:/Install/CCS/include/linkage.h: 
 D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/ABC_DQ0_POS_F.h: 
 D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/ABC_DQ0_NEG_F.h: 
 D:/Install/controlSUITE/libs/app_libs/solar/v1.2/float/include/CLARKE_F.h: 
